@@ -1,4 +1,7 @@
-const SERVER_ADDR: &str = "localhost";
-const SERVER_PORT: u16 = 9090;
+#![allow(dead_code)] // No warnings for unused consts
 
-pub(crate) const SOCKET_ADDR: (&str, u16) = (SERVER_ADDR, SERVER_PORT);
+pub(crate) const SERVER_ADDR: &str = "localhost:9090";
+pub(crate) const CHANNEL_CAPACITY: usize = 10;
+
+pub(crate) const PROMPT: &str = r"> ";
+pub(crate) const EXIT_COMMAND: &str = r"\q";
