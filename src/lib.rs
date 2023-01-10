@@ -1,8 +1,29 @@
 mod config;
 
-use tokio::net::TcpListener;
+use tokio::{
+    io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader},
+    net::{TcpListener, TcpStream},
+};
 
-// ============== Functions ===============
+// ============== Logic ===============
 pub async fn open_socket() -> TcpListener {
     TcpListener::bind(config::SOCKET_ADDR).await.unwrap()
+}
+
+pub async fn handle_connection(mut tcp_stream: TcpStream) {
+    // Buffered Reader to handle the connection's stream
+    let (reader, mut writer) = tcp_stream.split();
+    let mut reader = BufReader::new(reader);
+    
+    // Buffer for messages
+    let mut line = String::new();
+
+    // Handle incoming messages
+    loop {
+        // Prompt
+        writer.write(r"> ".as_bytes()).await.unwrap();
+        // Read message and return
+        reader.read_line(&mut line).await.unwrap();
+        writer.write_all(line.as_bytes()).await.unwrap();
+    }
 }
