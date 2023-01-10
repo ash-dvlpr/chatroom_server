@@ -22,8 +22,13 @@ pub async fn handle_connection(mut tcp_stream: TcpStream) {
     loop {
         // Prompt
         writer.write(r"> ".as_bytes()).await.unwrap();
-        // Read message and return
-        reader.read_line(&mut line).await.unwrap();
+        
+        // Read message
+        let bytes_read = 
+            reader.read_line(&mut line).await.unwrap_or(0);
+        if bytes_read == 0 { break; } // Client Disconnected
+
         writer.write_all(line.as_bytes()).await.unwrap();
+        line.clear(); // Clear buffer
     }
 }
