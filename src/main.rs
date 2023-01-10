@@ -4,8 +4,9 @@ use chatroom_server::*; // lib.rs
 async fn main() {
     let listener = open_socket().await;
 
-    // Establish a connection
-    let (socket, _addr) = listener.accept().await.unwrap();
-
-    handle_connection(socket).await;
+    // Handle incoming connections
+    loop {
+        let (socket, _addr) = listener.accept().await.unwrap();
+        tokio::spawn(handle_connection(socket));
+    }
 }
