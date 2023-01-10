@@ -15,8 +15,8 @@ use tokio::{
 pub async fn open_socket() -> TcpListener {
     TcpListener::bind(config::SERVER_ADDR).await.unwrap()
 }
-pub fn open_channel() -> (Sender<Message>, Receiver<Message>) {
-    broadcast::channel::<Message>(config::CHANNEL_CAPACITY)
+pub fn open_channel<T: Clone>() -> (Sender<T>, Receiver<T>) {
+    broadcast::channel::<T>(config::CHANNEL_CAPACITY)
 }
 
 pub async fn handle_connection(connection: Connection, tx: Sender<Message>) {
